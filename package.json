@@ -1,8 +1,8 @@
 {
-  "name": "dat-link-resolve",
-  "description": "resolve urls, links to a dat key",
-  "version": "2.3.0",
-  "author": "Joe Hand <joe@hand.email>",
+  "name": "dweb-link-resolve",
+  "description": "Library for resolving dWeb links.",
+  "version": "1.0.0",
+  "author": "jared <jr@hand.email>",
   "bugs": {
     "url": "https://github.com/datproject/dat-link-resolve/issues"
   },
