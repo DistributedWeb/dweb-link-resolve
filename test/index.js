@@ -1,15 +1,15 @@
 var test = require('tape')
 var datResolve = require('..')
-var enc = require('dat-encoding')
+var enc = require('dweb-encoding')
 
 // Strings that do not require lookup
 var stringKeys = [
   { type: 'valid', key: '6161616161616161616161616161616161616161616161616161616161616161' },
   { type: 'valid', key: Buffer.from('6161616161616161616161616161616161616161616161616161616161616161', 'hex') },
-  { type: 'valid', key: 'dat://6161616161616161616161616161616161616161616161616161616161616161' },
-  { type: 'valid', key: 'datproject.org/6161616161616161616161616161616161616161616161616161616161616161' },
-  { type: 'valid', key: 'dat://6161616161616161616161616161616161616161616161616161616161616161/' },
-  { type: 'valid', key: 'datproject.org/6161616161616161616161616161616161616161616161616161616161616161/' },
+  { type: 'valid', key: 'dweb://6161616161616161616161616161616161616161616161616161616161616161' },
+  { type: 'valid', key: 'dwebx.org/6161616161616161616161616161616161616161616161616161616161616161' },
+  { type: 'valid', key: 'dweb://6161616161616161616161616161616161616161616161616161616161616161/' },
+  { type: 'valid', key: 'dwebx.org/6161616161616161616161616161616161616161616161616161616161616161/' },
   { type: 'valid', key: 'host.com/whatever/6161616161616161616161616161616161616161616161616161616161616161' }
 ]
 
@@ -28,15 +28,15 @@ test('resolve key with path', function (t) {
 
 test('resolve https hostname with path', function (t) {
   t.plan(2)
-  datResolve('https://beakerbrowser.com/path', function (err, newKey) {
+  datResolve('https://dbrowser.com/path', function (err, newKey) {
     t.notOk(err, 'not expected error')
     t.ok(newKey, 'is a key')
   })
 })
 
-test('resolve dat hostname with path', function (t) {
+test('resolve dweb hostname with path', function (t) {
   t.plan(2)
-  datResolve('dat://beakerbrowser.com/path', function (err, newKey) {
+  datResolve('dweb://dbrowser.com/path', function (err, newKey) {
     t.notOk(err, 'not expected error')
     t.ok(newKey, 'is a key')
   })
@@ -44,7 +44,7 @@ test('resolve dat hostname with path', function (t) {
 
 test('resolve hostname with path', function (t) {
   t.plan(2)
-  datResolve('beakerbrowser.com/path', function (err, newKey) {
+  datResolve('dbrowser.com/path', function (err, newKey) {
     t.notOk(err, 'not expected error')
     t.ok(newKey, 'is a key')
   })
@@ -60,7 +60,7 @@ test('resolve key with version', function (t) {
 
 test('resolve hostname with version', function (t) {
   t.plan(2)
-  datResolve('beakerbrowser.com+5', function (err, newKey) {
+  datResolve('dbrowser.com+5', function (err, newKey) {
     t.notOk(err, 'not expected error')
     t.ok(newKey, 'is a key')
   })
@@ -87,32 +87,32 @@ test('resolve key without http', function (t) {
   })
 })
 
-test('resolve beaker browser without protocol', function (t) {
-  datResolve('beakerbrowser.com', function (err, key) {
+test('resolve dbrowser browser without protocol', function (t) {
+  datResolve('dbrowser.com', function (err, key) {
     t.error(err, 'no error')
     t.ok(key, 'got key')
     t.end()
   })
 })
 
-test('resolve beaker browser http', function (t) {
-  datResolve('http://beakerbrowser.com', function (err, key) {
+test('resolve dbrowser browser http', function (t) {
+  datResolve('http://dbrowser.com', function (err, key) {
     t.error(err, 'no error')
     t.ok(key, 'got key')
     t.end()
   })
 })
 
-test('resolve beaker browser https', function (t) {
-  datResolve('https://beakerbrowser.com', function (err, key) {
+test('resolve dbrowser browser https', function (t) {
+  datResolve('https://dbrowser.com', function (err, key) {
     t.error(err, 'no error')
     t.ok(key, 'got key')
     t.end()
   })
 })
 
-test('resolve beaker browser dat', function (t) {
-  datResolve('dat://beakerbrowser.com', function (err, key) {
+test('resolve dbrowser browser dweb', function (t) {
+  datResolve('dweb://dbrowser.com', function (err, key) {
     t.error(err, 'no error')
     t.ok(key, 'got key')
     t.end()
@@ -124,7 +124,7 @@ test('callbacks are called out of a try/catch block', function (t) {
     t.equals(err.message, 'test', 'Making sure that the right error occurs')
     t.end()
   })
-  datResolve('dat://beakerbrowser.com', function () {
+  datResolve('dweb://dbrowser.com', function () {
     throw new Error('test')
   })
 })

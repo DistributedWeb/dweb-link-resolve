@@ -1,19 +1,19 @@
 var assert = require('assert')
-var stringKey = require('dat-encoding').toStr
+var stringKey = require('dweb-encoding').toStr
 var get = require('simple-get')
-var datDns = require('dat-dns')()
-var debug = require('debug')('dat-link-resolve')
+var datDns = require('dweb-dns')()
+var debug = require('debug')('dweb-link-resolve')
 
 module.exports = resolve
 
 function resolve (link, cb) {
-  assert.ok(link, 'dat-link-resolve: link required')
-  assert.strictEqual(typeof cb, 'function', 'dat-link-resolve: callback required')
+  assert.ok(link, 'dweb-link-resolve: link required')
+  assert.strictEqual(typeof cb, 'function', 'dweb-link-resolve: callback required')
 
   var key = null
 
   try {
-    // validates + removes dat://
+    // validates + removes dweb://
     // also works for http urls with keys in them
     key = stringKey(link)
   } catch (e) {
@@ -23,8 +23,8 @@ function resolve (link, cb) {
   cb(null, key)
 
   function lookup () {
-    // if it starts with http or dat: use as is, otherwise prepend http://
-    var urlLink = (link.indexOf('http') && link.indexOf('dat:')) ? ('http://' + link) : link
+    // if it starts with http or dweb: use as is, otherwise prepend http://
+    var urlLink = (link.indexOf('http') && link.indexOf('dweb:')) ? ('http://' + link) : link
 
     function resolveName () {
       datDns.resolveName(urlLink, function (err, key) {
@@ -37,7 +37,7 @@ function resolve (link, cb) {
 
     debug('resolveKey', link, urlLink)
     get({
-      url: urlLink.replace('dat://', 'http://'),
+      url: urlLink.replace('dweb://', 'http://'),
       json: true,
       timeout: 1500
     }, function (err, resp, body) {
@@ -47,7 +47,7 @@ function resolve (link, cb) {
       }
 
       // first check if key is in header response
-      key = resp.headers['hyperdrive-key'] || resp.headers['dat-key']
+      key = resp.headers['dwebfs-key'] || resp.headers['dweb-key']
       if (key) {
         debug('Received key from http header:', key)
         return cb(null, key)
